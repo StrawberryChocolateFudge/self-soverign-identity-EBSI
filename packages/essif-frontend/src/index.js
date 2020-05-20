@@ -1,0 +1,5 @@
+import "react-app-polyfill/stable";
+import ReactDOM from "react-dom";
+import App from "./pages/App";
+
+ReactDOM.render(App(), document.getElementById("root"));

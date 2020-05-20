@@ -1,0 +1,7 @@
+/dist
+/node_modules
+*.log
+npm-debug.log*
+/coverage
+.env
+sonar-report.xml

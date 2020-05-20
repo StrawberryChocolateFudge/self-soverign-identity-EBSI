@@ -1,0 +1,18 @@
+# Ignore all by default
+*
+
+# Exceptions
+
+# Backend
+!packages/essif-backend/public
+!packages/essif-backend/scripts
+!packages/essif-backend/src
+!packages/essif-backend/package*.json
+!packages/essif-backend/tsconfig*.json
+!packages/essif-backend/nest-cli.json
+
+# Frontend
+!packages/essif-frontend/public
+!packages/essif-frontend/scripts
+!packages/essif-frontend/src
+!packages/essif-frontend/package*.json

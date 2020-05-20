@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "scripts": {
+    "audit": "audit-ci --moderate && run-s audit:*",
+    "audit:backend": "cd packages/essif-backend && audit-ci --moderate",
+    "audit:frontend": "cd packages/essif-frontend && audit-ci --moderate",
+    "bootstrap": "run-s bootstrap:*",
+    "bootstrap:backend": "cd packages/essif-backend && npm install",
+    "bootstrap:frontend": "cd packages/essif-frontend && npm install",
+    "lint": "run-s lint:*",
+    "lint:backend": "cd packages/essif-backend && npm run lint",
+    "lint:frontend": "cd packages/essif-frontend && npm run lint",
+    "postinstall": "npm run bootstrap",
+    "pre-commit": "run-s pre-commit:*",
+    "pre-commit:backend": "cd packages/essif-backend && npm run lint-staged",
+    "pre-commit:frontend": "cd packages/essif-frontend && npm run lint-staged",
+    "test": "run-s test:*",
+    "test:unit": "run-s test:unit:*",
+    "test:unit:backend": "cd packages/essif-backend && npm run test:unit",
+    "test:unit:frontend": "cd packages/essif-frontend && npm run test:unit",
+    "test:e2e": "run-s test:e2e:*",
+    "test:e2e:backend": "cd packages/essif-backend && npm run test:e2e"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ec.europa.eu/cefdigital/code/scm/ebsi/self-sovereign-identity.git"
+  },
+  "license": "EUPL-1.2",
+  "devDependencies": {
+    "audit-ci": "^3.0.0",
+    "husky": "^4.2.5",
+    "npm-run-all": "^4.1.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit"
+    }
+  }
+}

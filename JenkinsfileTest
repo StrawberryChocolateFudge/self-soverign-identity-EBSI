@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    environment {
+        APP_ISSUER=credentials('APP_ISSUER')
+        APP_PRIVATE_KEY=credentials('APP_PRIVATE_KEY')
+        REACT_APP_EBSI_ENV='integration'
+        EBSI_ENV='integration'
+    }
+    stages {
+        stage('Clone repo') {
+            steps {
+               cleanWs()
+               checkout scm;
+            }
+        }
+        stage('Test') {
+            steps{
+                sh "npm install"
+                sh "npm run bootstrap"
+                sh "npm run test"
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('LocalSonar'){
+                    sh "/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/bin/sonar-scanner -Dsonar.host.url=https://infra.ebsi.xyz/sonar -Dsonar.projectName=self-sovereign-identity -Dsonar.projectVersion=1.0 -Dsonar.projectKey=self-sovereign-identity -Dsonar.sources=. -Dsonar.projectBaseDir=${WORKSPACE}"
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+}

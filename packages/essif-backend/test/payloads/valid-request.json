@@ -1,0 +1,13 @@
+{
+  "credentialSubject": {
+    "id": "did:ebsi:test",
+    "personIdentifier": "a",
+    "currentAddress": "a",
+    "currentFamilyName": "a",
+    "currentGivenName": "a",
+    "birthName": "a",
+    "dateOfBirth": "1977-04-22T06:00:00Z",
+    "placeOfBirth": "a",
+    "gender": "a"
+  }
+}
