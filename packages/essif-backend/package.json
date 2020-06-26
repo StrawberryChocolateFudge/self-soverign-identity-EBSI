@@ -18,7 +18,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@cef-ebsi/did-auth": "0.0.1",
+    "@cef-ebsi/did-auth": "0.0.3",
     "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^7.0.13",
     "@nestjs/config": "^0.4.2",

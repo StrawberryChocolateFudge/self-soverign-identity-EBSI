@@ -44,7 +44,7 @@ export function generateSelfSignedToken({ audience, iss, privKey }) {
   const key = JWK.asKey(base64url.decode(privKey));
 
   const token = JWT.sign(tokenPayload, key, {
-    expiresIn: "15 minutes",
+    expiresIn: "15 seconds",
     audience,
     header: {
       typ: "JWT",
