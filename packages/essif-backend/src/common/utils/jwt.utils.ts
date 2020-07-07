@@ -1,6 +1,4 @@
-import { JWT, JWK } from "jose";
-import crypto from "crypto";
-import base64url from "base64url";
+import { JWT } from "jose";
 import { JwtPayload } from "../interfaces/jwt.payload";
 
 export function decodeToken(token: string) {
@@ -27,29 +25,4 @@ export function isTokenExpired(jwtPayload: JwtPayload) {
   }
 
   return jwtPayload.exp * 1000 < Date.now();
-}
-
-export function generateSelfSignedToken({ audience, iss, privKey }) {
-  if (!audience || !iss || !privKey) {
-    throw new Error("Invalid parameters");
-  }
-
-  const nonce = crypto.randomBytes(16).toString("base64");
-
-  const tokenPayload = {
-    iss,
-    nonce,
-  };
-
-  const key = JWK.asKey(base64url.decode(privKey));
-
-  const token = JWT.sign(tokenPayload, key, {
-    expiresIn: "15 seconds",
-    audience,
-    header: {
-      typ: "JWT",
-    },
-  });
-
-  return token;
 }

@@ -4,7 +4,6 @@ import { ConfigModule } from "@nestjs/config";
 import { Response } from "jest-express/lib/response";
 import { VerifiableIdsController } from "./verifiable-ids.controller";
 import { VerifiableIdsService } from "./verifiable-ids.service";
-import { JwtService } from "../common/services/jwt.service";
 import { WalletService } from "../common/services/wallet.service";
 import { CreateVerifiableIdDto } from "./dtos/create-verifiable-id.dto";
 import configuration from "../config/configuration";
@@ -24,7 +23,7 @@ describe("verifiable-ids.controller", () => {
         }),
       ],
       controllers: [VerifiableIdsController],
-      providers: [VerifiableIdsService, WalletService, JwtService],
+      providers: [VerifiableIdsService, WalletService],
     }).compile();
 
     verifiableIdsService = moduleRef.get<VerifiableIdsService>(

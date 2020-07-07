@@ -22,7 +22,7 @@
 # Required ENV variables:
 #   - EBSI_ENV ("local", "integration", "development", "production")
 #   - APP_ISSUER
-#   - APP_PRIVATE_KEY (base64-encoded PEM)
+#   - APP_PRIVATE_KEY (hex key)
 #
 # Optional ENV variables:
 #   - NODE_ENV ("development" or "production" ; default: "production")
@@ -70,7 +70,7 @@ COPY ./packages/essif-backend /usr/src/app/
 RUN npm run build && npm prune --production
 
 # Stage 3: run light app
-FROM node:12-alpine
+FROM node:12.16.1-alpine
 WORKDIR /usr/src/app
 COPY --from=builder-backend /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --from=builder-backend /usr/src/app/dist /usr/src/app/dist

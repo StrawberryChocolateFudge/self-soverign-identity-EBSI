@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         APP_ISSUER=credentials('APP_ISSUER')
-        APP_PRIVATE_KEY=credentials('APP_PRIVATE_KEY')
+        APP_PRIVATE_KEY=credentials('API_PRIVATE_KEY_SELF_SOVEREING')
         REACT_APP_EBSI_ENV='integration'
         EBSI_ENV='integration'
     }

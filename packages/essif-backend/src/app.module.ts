@@ -5,7 +5,6 @@ import { join } from "path";
 import * as Joi from "@hapi/joi";
 import { VerifiableIdsController } from "./verifiable-id/verifiable-ids.controller";
 import { VerifiableIdsService } from "./verifiable-id/verifiable-ids.service";
-import { JwtService } from "./common/services/jwt.service";
 import { WalletService } from "./common/services/wallet.service";
 import configuration from "./config/configuration";
 
@@ -42,7 +41,7 @@ import configuration from "./config/configuration";
     HttpModule,
   ],
   controllers: [VerifiableIdsController],
-  providers: [VerifiableIdsService, JwtService, WalletService],
+  providers: [VerifiableIdsService, WalletService],
 })
 export class AppModule {}
 

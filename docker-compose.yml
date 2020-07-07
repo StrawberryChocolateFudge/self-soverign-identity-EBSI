@@ -11,7 +11,7 @@ services:
         EBSI_ENV: ${EBSI_ENV:?Missing EBSI_ENV variable}
         EBSI_DEMONSTRATOR_URL: ${EBSI_DEMONSTRATOR_URL:?Missing EBSI_DEMONSTRATOR_URL variable}
         EBSI_WALLET_WEB_CLIENT_URL: ${EBSI_WALLET_WEB_CLIENT_URL:?Missing EBSI_WALLET_WEB_CLIENT_URL variable}
-    image: 305472350643.dkr.ecr.eu-central-1.amazonaws.com/intebsi/self-sovereign-identity_EBSIINT-1380-bugfix_v0.0.1
+    image: 305472350643.dkr.ecr.eu-central-1.amazonaws.com/intebsi/self-sovereign-identity_ebsiint-1763-app-jwt_v0.0.1
     environment:
       EBSI_ENV: ${EBSI_ENV:?Missing EBSI_ENV variable}
       APP_ISSUER: ${APP_ISSUER:?Missing APP_ISSUER variable}

@@ -1,10 +1,5 @@
 import { JWT, JWK, errors } from "jose";
-import {
-  decodeToken,
-  decodeTokenPayload,
-  isTokenExpired,
-  generateSelfSignedToken,
-} from "./jwt.utils";
+import { decodeToken, decodeTokenPayload, isTokenExpired } from "./jwt.utils";
 
 describe("decodeToken", () => {
   it("fails when no token is prodvided", () => {
@@ -90,56 +85,5 @@ describe("isTokenExpired", () => {
 
     // @ts-ignore
     expect(isTokenExpired(payload)).toBe(true);
-  });
-});
-
-describe("generateSelfSignedToken", () => {
-  it("fails when 1 or more parameter is missing or empty", () => {
-    expect.assertions(6);
-
-    // @ts-ignore
-    expect(() => generateSelfSignedToken()).toThrow(TypeError);
-
-    // @ts-ignore
-    expect(() => generateSelfSignedToken("")).toThrow("Invalid parameters");
-
-    // @ts-ignore
-    expect(() => generateSelfSignedToken({})).toThrow("Invalid parameters");
-
-    // @ts-ignore
-    expect(() => generateSelfSignedToken({ audience: "test" })).toThrow(
-      "Invalid parameters"
-    );
-
-    // @ts-ignore
-    expect(() => generateSelfSignedToken({ privKey: "test" })).toThrow(
-      "Invalid parameters"
-    );
-
-    expect(() =>
-      generateSelfSignedToken({ audience: "", privKey: "", iss: "" })
-    ).toThrow("Invalid parameters");
-  });
-
-  it("generates a valid token", () => {
-    expect.assertions(3);
-
-    const token = generateSelfSignedToken({
-      audience: "test",
-      privKey: "test",
-      iss: "Sample Verifiable ID Issuer",
-    });
-
-    const decodedToken = decodeTokenPayload(token);
-
-    // Test static properties
-    expect(decodedToken).toMatchObject({
-      aud: "test",
-      iss: "Sample Verifiable ID Issuer",
-    });
-
-    // Make sure dynamic properties are set to
-    expect(decodedToken).toHaveProperty("iat");
-    expect(decodedToken).toHaveProperty("exp");
   });
 });

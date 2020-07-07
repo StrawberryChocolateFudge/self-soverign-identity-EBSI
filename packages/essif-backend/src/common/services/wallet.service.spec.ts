@@ -5,10 +5,9 @@ import { of } from "rxjs";
 import base64url from "base64url";
 import { AxiosResponse, AxiosError } from "axios";
 import { WalletService } from "./wallet.service";
-import { JwtService } from "./jwt.service";
 import configuration from "../../config/configuration";
 
-enum NOTIFICATION_TYPE {
+enum NotificationType {
   STORE_CREDENTIAL,
   STORE_VERIFIABLEID,
   REQUEST_PRESENTATION,
@@ -20,10 +19,6 @@ describe("wallet.service", () => {
   let walletService: WalletService;
   let httpService: HttpService;
   let configService: ConfigService;
-  let jwtService: JwtService;
-
-  const accessToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
   // eslint-disable-next-line jest/no-hooks
   beforeAll(async () => {
@@ -35,13 +30,12 @@ describe("wallet.service", () => {
           load: [configuration],
         }),
       ],
-      providers: [WalletService, JwtService],
+      providers: [WalletService],
     }).compile();
 
     httpService = module.get<HttpService>(HttpService);
     walletService = module.get<WalletService>(WalletService);
     configService = module.get<ConfigService>(ConfigService);
-    jwtService = module.get<JwtService>(JwtService);
 
     // Mute logger debug
     jest.spyOn(Logger, "debug").mockImplementation(() => {});
@@ -57,26 +51,8 @@ describe("wallet.service", () => {
     expect(walletService).toBeDefined();
   });
 
-  it("should log an error when jwtService.createSignedAssertionToken throws", async () => {
-    expect.assertions(3);
-
-    const jwtSpy = jest
-      .spyOn(jwtService, "createSignedAssertionToken")
-      .mockImplementationOnce(() => {
-        throw new Error("test");
-      });
-
-    const loggerErrorSpy = jest
-      .spyOn(Logger, "error")
-      .mockImplementation(() => {});
-
-    await expect(walletService.login()).rejects.toThrow(new Error("test"));
-    expect(jwtSpy).toHaveBeenCalledTimes(1);
-    expect(loggerErrorSpy).toHaveBeenCalledTimes(2);
-  });
-
   it("shoud return a session token when login() is called", async () => {
-    expect.assertions(3);
+    expect.assertions(2);
 
     const walletRes: AxiosResponse = {
       data: {},
@@ -90,15 +66,11 @@ describe("wallet.service", () => {
       .spyOn(httpService, "post")
       .mockImplementationOnce(() => of(walletRes));
 
-    const jwtSpy = jest
-      .spyOn(jwtService, "createSignedAssertionToken")
-      .mockImplementationOnce(() => accessToken);
-
     await walletService.login();
 
     const expectedPayload = {
       grantType: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: accessToken,
+      assertion: expect.any(String),
       scope: "ebsi profile entity",
     };
 
@@ -107,11 +79,10 @@ describe("wallet.service", () => {
 
     expect(axiosSpy).toHaveBeenLastCalledWith(walletURL, expectedPayload);
     expect(axiosSpy).toHaveBeenCalledTimes(1);
-    expect(jwtSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should throw an error if Wallet API /sessions returns an error", async () => {
-    expect.assertions(5);
+    expect.assertions(4);
 
     const error = {
       name: "test",
@@ -144,17 +115,13 @@ describe("wallet.service", () => {
         },
       }));
 
-    const jwtSpy = jest
-      .spyOn(jwtService, "createSignedAssertionToken")
-      .mockImplementationOnce(() => accessToken);
-
     const loggerErrorSpy = jest
       .spyOn(Logger, "error")
       .mockImplementation(() => {});
 
     const expectedPayload = {
       grantType: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: accessToken,
+      assertion: expect.any(String),
       scope: "ebsi profile entity",
     };
 
@@ -165,7 +132,6 @@ describe("wallet.service", () => {
     expect(axiosPostSpy).toHaveBeenLastCalledWith(walletURL, expectedPayload);
     expect(axiosPostSpy).toHaveBeenCalledTimes(1);
     expect(loggerErrorSpy).toHaveBeenCalledTimes(8);
-    expect(jwtSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should call /signatures endpoint with the correct payload", async () => {
@@ -234,7 +200,7 @@ describe("wallet.service", () => {
       sender: verifiableId.issuer,
       notification: {
         target: verifiableId.credentialSubject.id,
-        notificationType: NOTIFICATION_TYPE.STORE_VERIFIABLEID,
+        notificationType: NotificationType.STORE_VERIFIABLEID,
         name: "Verifiable ID",
         data: { base64: base64url.encode(JSON.stringify(verifiableId)) },
       },

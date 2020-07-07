@@ -1,11 +1,12 @@
+import crypto from "crypto";
 import { Injectable, HttpService, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import base64url from "base64url";
+import { Agent, Scope } from "@cef-ebsi/app-jwt";
 import { SessionsResponse } from "../types/sessions.response";
-import { JwtService } from "./jwt.service";
 
 // Imported from previous wallet backend, probably need to be standardised
-enum NOTIFICATION_TYPE {
+enum NotificationType {
   STORE_CREDENTIAL,
   STORE_VERIFIABLEID,
   REQUEST_PRESENTATION,
@@ -19,7 +20,6 @@ export class WalletService {
 
   constructor(
     private readonly http: HttpService,
-    private readonly jwtService: JwtService,
     private configService: ConfigService
   ) {}
 
@@ -30,21 +30,26 @@ export class WalletService {
    */
   async login(): Promise<SessionsResponse> {
     this.logger.debug("Login with Wallet API");
-    let token;
+    let payload;
 
     try {
-      token = this.jwtService.createSignedAssertionToken("ebsi-wallet");
+      const privKey = this.configService.get("privateKey");
+      const iss = this.configService.get("issuer");
+
+      const agent = new Agent(Scope.ENTITY, privKey, {
+        issuer: iss,
+      });
+
+      const nonce = crypto.randomBytes(16).toString("base64");
+
+      payload = await agent.createRequestPayload("ebsi-wallet", {
+        nonce,
+      });
     } catch (error) {
       this.logger.error("Error while creating the self-signed token");
       this.logger.error(error);
       throw error;
     }
-
-    const payload = {
-      grantType: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: token,
-      scope: "ebsi profile entity",
-    };
 
     const walletApi = this.configService.get("walletApi");
 
@@ -104,7 +109,7 @@ export class WalletService {
       sender: verifiableId.issuer,
       notification: {
         target: verifiableId.credentialSubject.id,
-        notificationType: NOTIFICATION_TYPE.STORE_VERIFIABLEID,
+        notificationType: NotificationType.STORE_VERIFIABLEID,
         name: "Verifiable ID",
         data: { base64: base64url.encode(JSON.stringify(verifiableId)) },
       },

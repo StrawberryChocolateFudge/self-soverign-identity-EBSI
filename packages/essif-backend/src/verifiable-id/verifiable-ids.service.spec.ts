@@ -4,7 +4,6 @@ import { ConfigService, ConfigModule } from "@nestjs/config";
 import { of } from "rxjs";
 import { AxiosResponse } from "axios";
 import { WalletService } from "../common/services/wallet.service";
-import { JwtService } from "../common/services/jwt.service";
 import { VerifiableIdsService } from "./verifiable-ids.service";
 import { CreateVerifiableIdDto } from "./dtos/create-verifiable-id.dto";
 import { formatVerifiableId } from "./verifiable-ids.utils";
@@ -30,7 +29,7 @@ describe("verifiable-id.service", () => {
           load: [configuration],
         }),
       ],
-      providers: [VerifiableIdsService, JwtService, WalletService],
+      providers: [VerifiableIdsService, WalletService],
     }).compile();
 
     httpService = module.get<HttpService>(HttpService);
