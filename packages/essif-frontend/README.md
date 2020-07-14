@@ -1,5 +1,12 @@
 # Self-Sovereign Identity Frontend
 
+## Requirements
+
+You need:
+
+- Node.js >= 12
+- Yarn >= 1.22.0
+
 ## Getting started
 
 Create a copy of `.env.example` and name it `.env`.
@@ -7,13 +14,13 @@ Create a copy of `.env.example` and name it `.env`.
 Install the dependencies:
 
 ```sh
-npm install
+yarn install
 ```
 
 Start the dev server:
 
 ```sh
-npm start
+yarn start
 ```
 
 It will open http://localhost:3000/ automatically.
@@ -21,7 +28,7 @@ It will open http://localhost:3000/ automatically.
 Create a production build:
 
 ```sh
-npm run build
+yarn build
 ```
 
 ## Auditing the dependencies
@@ -29,7 +36,7 @@ npm run build
 Audit dependencies with:
 
 ```sh
-npm audit
+yarn audit
 ```
 
 ## Linting
@@ -37,7 +44,7 @@ npm audit
 Lint all the files with one command:
 
 ```sh
-npm run lint
+yarn lint
 ```
 
 You can also run the linters one by one:
@@ -45,29 +52,23 @@ You can also run the linters one by one:
 ### ESLint
 
 ```sh
-npm run lint:js
-# or
-npx eslint . --ext .js,.jsx
+yarn lint:js
 ```
 
 ### stylelint
 
 ```sh
-npm run lint:css
-# or
-npx stylelint "**/*.css"
+yarn lint:css
 ```
 
 ### Prettier
 
 ```sh
-npm run lint:prettier
-# or
-npx prettier . --check
+yarn lint:prettier
 ```
 
 ## Testing
 
 ```sh
-npm test
+yarn test
 ```

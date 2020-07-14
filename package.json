@@ -1,25 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "audit": "audit-ci --moderate && run-s audit:*",
-    "audit:backend": "cd packages/essif-backend && audit-ci --moderate",
-    "audit:frontend": "cd packages/essif-frontend && audit-ci --moderate",
-    "bootstrap": "run-s bootstrap:*",
-    "bootstrap:backend": "cd packages/essif-backend && npm install",
-    "bootstrap:frontend": "cd packages/essif-frontend && npm install",
-    "lint": "run-s lint:*",
-    "lint:backend": "cd packages/essif-backend && npm run lint",
-    "lint:frontend": "cd packages/essif-frontend && npm run lint",
-    "postinstall": "npm run bootstrap",
-    "pre-commit": "run-s pre-commit:*",
-    "pre-commit:backend": "cd packages/essif-backend && npm run lint-staged",
-    "pre-commit:frontend": "cd packages/essif-frontend && npm run lint-staged",
+    "audit": "audit-ci --moderate",
+    "lint": "yarn workspaces run lint",
+    "lint-staged": "yarn workspaces run lint-staged",
     "test": "run-s test:*",
-    "test:unit": "run-s test:unit:*",
-    "test:unit:backend": "cd packages/essif-backend && npm run test:unit",
-    "test:unit:frontend": "cd packages/essif-frontend && npm run test:unit",
-    "test:e2e": "run-s test:e2e:*",
-    "test:e2e:backend": "cd packages/essif-backend && npm run test:e2e"
+    "test:unit": "yarn workspaces run test:unit",
+    "test:e2e": "yarn workspace essif-backend run test:e2e"
   },
   "repository": {
     "type": "git",
@@ -33,7 +20,11 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run pre-commit"
+      "pre-commit": "yarn run lint-staged"
     }
-  }
+  },
+  "workspaces": [
+    "packages/essif-backend",
+    "packages/essif-frontend"
+  ]
 }

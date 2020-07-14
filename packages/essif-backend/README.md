@@ -1,5 +1,12 @@
 # Self-Sovereign Identity Frontend Backend
 
+## Requirements
+
+You need:
+
+- Node.js >= 12
+- Yarn >= 1.22.0
+
 ## Getting started
 
 Create a copy of `.env.example` and name it `.env`. Set the private key correctly.
@@ -7,13 +14,13 @@ Create a copy of `.env.example` and name it `.env`. Set the private key correctl
 Install the dependencies:
 
 ```sh
-npm install
+yarn install
 ```
 
 Start the server:
 
 ```sh
-npm start
+yarn start
 ```
 
 Open http://localhost:8080/demo/essif/issue-id
@@ -27,7 +34,7 @@ The backend API is available at http://localhost:8080/demo/essif/issue-id/api
 To create a production build, run:
 
 ```sh
-npm run build
+yarn build
 ```
 
 ## Auditing the dependencies
@@ -35,7 +42,7 @@ npm run build
 Audit dependencies with:
 
 ```sh
-npm audit
+yarn audit
 ```
 
 ## Linting
@@ -43,7 +50,7 @@ npm audit
 Lint all the files with one command:
 
 ```sh
-npm run lint
+yarn lint
 ```
 
 You can also run the linters one by one:
@@ -51,23 +58,19 @@ You can also run the linters one by one:
 ### ESLint
 
 ```sh
-npm run lint:js
-# or
-npx eslint . --ext .js,.jsx
+yarn lint:js
 ```
 
 ### tsc (TypeScript)
 
 ```sh
-npm run lint:ts
+yarn lint:ts
 ```
 
 ### Prettier
 
 ```sh
-npm run lint:prettier
-# or
-npx prettier . --check
+yarn lint:prettier
 ```
 
 ## Testing
@@ -75,17 +78,17 @@ npx prettier . --check
 All the tests:
 
 ```sh
-npm run test
+yarn test
 ```
 
 Unit tests only:
 
 ```sh
-npm run test:unit
+yarn test:unit
 ```
 
 e2e tests only:
 
 ```sh
-npm run test:e2e
+yarn test:e2e
 ```

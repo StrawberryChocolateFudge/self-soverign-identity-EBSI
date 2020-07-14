@@ -20,20 +20,29 @@ In production, the build of Create-React-App should be served from the `public/`
 
 ## Getting started
 
+### Requirements
+
+You need:
+
+- Node.js >= 12
+- Yarn >= 1.22.0
+
+### Installation
+
 ```sh
-npm install
+yarn install
 ```
 
 ## Linting
 
 ```sh
-npm run lint
+yarn lint
 ```
 
 ## Auditing
 
 ```sh
-npm run audit
+yarn run audit
 ```
 
 ## Testing
@@ -46,19 +55,19 @@ First of all, make sure to correctly configure your environment. This means 2 th
 Now you can run the following command to run all the tests:
 
 ```sh
-npm test
+yarn test
 ```
 
 You can also decide to run unit tests only with:
 
 ```sh
-npm run test:unit
+yarn test:unit
 ```
 
 The backend also contains e2e tests that you can run with:
 
 ```sh
-npm run test:e2e
+yarn test:e2e
 ```
 
 ## Run with Docker Compose

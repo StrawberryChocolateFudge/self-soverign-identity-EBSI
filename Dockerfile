@@ -33,18 +33,21 @@
 #   - LOG_LEVEL ("error", "warn", "info", "verbose" or "debug" ; default: set in code, depends on EBSI_ENV)
 
 # Stage 0: prepare node alpine image
-FROM node:12-alpine AS base
-RUN apk add --update --no-cache \
-  python \
-  make \
-  g++
-
-# Stage 1: build ESSIF frontend
-FROM base AS builder-frontend
+FROM node:12.16.1-alpine AS base
 WORKDIR /usr/src/app
-COPY ./packages/essif-frontend/package*.json /usr/src/app/
-RUN npm ci --quiet --no-progress
-COPY ./packages/essif-frontend /usr/src/app/
+COPY ./package.json /usr/src/app/package.json
+COPY ./yarn.lock /usr/src/app/yarn.lock
+COPY ./packages/essif-backend/package.json /usr/src/app/packages/essif-backend/package.json
+COPY ./packages/essif-frontend/package.json /usr/src/app/packages/essif-frontend/package.json
+RUN yarn install --frozen-lockfile --silent --production && yarn cache clean
+
+# Stage 1: build frontend and backend
+FROM base AS builder
+WORKDIR /usr/src/app
+# Install dev dependencies as well
+RUN yarn install --frozen-lockfile --silent
+# 1.1: build ESSIF backend
+COPY ./packages/essif-frontend /usr/src/app/packages/essif-frontend/
 # Import ARGs
 ARG APP_PUBLIC_URL
 ARG EBSI_ENV
@@ -59,24 +62,17 @@ ARG REACT_APP_EBSI_ENV=${EBSI_ENV}
 ARG REACT_APP_DEMONSTRATOR_URL=${EBSI_DEMONSTRATOR_URL}
 ARG REACT_APP_WALLET_WEB_CLIENT_URL=${EBSI_WALLET_WEB_CLIENT_URL}
 ARG REACT_APP_BACKEND_EXTERNAL_URL=${APP_PUBLIC_URL}
-RUN npm run build
-
-# Stage 2: build ESSIF backend
-FROM base AS builder-backend
-WORKDIR /usr/src/app
-COPY ./packages/essif-backend/package*.json /usr/src/app/
-RUN npm ci --quiet --no-progress
-COPY ./packages/essif-backend /usr/src/app/
-RUN npm run build && npm prune --production
+RUN cd packages/essif-frontend && yarn build
+# 1.2: build ESSIF backend
+COPY ./packages/essif-backend /usr/src/app/packages/essif-backend/
+RUN cd packages/essif-backend && yarn build
 
 # Stage 3: run light app
-FROM node:12.16.1-alpine
+FROM base
 WORKDIR /usr/src/app
-COPY --from=builder-backend /usr/src/app/node_modules /usr/src/app/node_modules
-COPY --from=builder-backend /usr/src/app/dist /usr/src/app/dist
-COPY --from=builder-frontend /usr/src/app/build /usr/src/app/public
-COPY ./packages/essif-backend/package*.json /usr/src/app/
-COPY ./packages/essif-backend/scripts/start.sh /usr/src/app/scripts/start.sh
+COPY --from=builder /usr/src/app/packages/essif-backend/dist /usr/src/app/packages/essif-backend/dist
+COPY --from=builder /usr/src/app/packages/essif-frontend/build /usr/src/app/packages/essif-backend/public
+COPY ./packages/essif-backend/scripts/start.sh /usr/src/app/packages/essif-backend/scripts/start.sh
 USER node
 ENV NODE_ENV production
-CMD sh scripts/start.sh
+CMD cd packages/essif-backend && sh scripts/start.sh
