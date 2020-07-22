@@ -15,7 +15,10 @@ export function Header() {
     setLoginBoxOpen(false);
   }, [location.pathname]);
 
-  const toggleLoginBox = () => setLoginBoxOpen(!loginBoxOpen);
+  const toggleLoginBox = (e) => {
+    e.preventDefault();
+    setLoginBoxOpen(!loginBoxOpen);
+  };
 
   return (
     <>
@@ -41,8 +44,9 @@ export function Header() {
               <div className="ecl-site-header-harmonised__login-container">
                 {isAuthenticated ? (
                   <>
-                    <button
-                      type="button"
+                    <Link
+                      role="button"
+                      to="/logout"
                       className="ecl-link ecl-link--standalone ecl-site-header-harmonised__login-toggle"
                       aria-controls="login-box-id"
                       aria-expanded={loginBoxOpen}
@@ -64,7 +68,7 @@ export function Header() {
                       >
                         <use xlinkHref={`${icons}#ui--corner-arrow`} />
                       </svg>
-                    </button>
+                    </Link>
                     <div
                       id="login-box-id"
                       className={classnames(
