@@ -1,5 +1,6 @@
 {
   "private": true,
+  "license": "EUPL-1.2",
   "scripts": {
     "audit": "audit-ci --moderate",
     "lint": "yarn workspaces run lint",
@@ -12,7 +13,6 @@
     "type": "git",
     "url": "https://ec.europa.eu/cefdigital/code/scm/ebsi/self-sovereign-identity.git"
   },
-  "license": "EUPL-1.2",
   "devDependencies": {
     "audit-ci": "^3.1.0",
     "husky": "^4.2.5",
