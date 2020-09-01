@@ -112,7 +112,7 @@ export class VerifiableIdsService {
 
     const redirectUrl = `${this.configService.get(
       "walletWebClientUrl"
-    )}?did-auth=${uri}`;
+    )}/auth?did-auth=${uri}`;
 
     return {
       redirectUrl,
