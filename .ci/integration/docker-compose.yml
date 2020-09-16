@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  self-sovereign-identity:
+    image: 305472350643.dkr.ecr.eu-central-1.amazonaws.com/intebsi/self-sovereign-identity:integration_ebsiint-2058-did-auth_v0.0.1
+    build:
+      context: ../..
+      args:
+        APP_PUBLIC_URL: ${APP_PUBLIC_URL:?Missing APP_PUBLIC_URL variable}
+        EBSI_ENV: ${EBSI_ENV:?Missing EBSI_ENV variable}
+        EBSI_DEMONSTRATOR_URL: ${EBSI_DEMONSTRATOR_URL:?Missing EBSI_DEMONSTRATOR_URL variable}
+        EBSI_WALLET_WEB_CLIENT_URL: ${EBSI_WALLET_WEB_CLIENT_URL:?Missing EBSI_WALLET_WEB_CLIENT_URL variable}
