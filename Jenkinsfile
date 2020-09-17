@@ -19,9 +19,6 @@ pipeline {
         MCO_TARGET = getMcoTarget(env.BRANCH_NAME)
         CONTAINER_NAME = "`grep -A1 services .ci/${EBSI_ENV}/docker-compose.yml | tail -1 | sed -e s'/ //'g -e s'/://'g`"
         TAG = "`grep image .ci/${EBSI_ENV}/docker-compose.yml | cut -d':' -f3`"
-        APP_ISSUER=credentials('APP_ISSUER')
-        APP_PRIVATE_KEY=credentials('API_PRIVATE_KEY_SELF_SOVEREING')
-        REACT_APP_EBSI_ENV='integration'
     }
     stages {
         stage('Clone repo') {
@@ -29,10 +26,15 @@ pipeline {
                 checkout scm;
             }
         }
-        stage('Unit Test') {
-            steps{
-                sh "yarn install --frozen-lockfile"
-                sh "yarn test:unit"
+        stage('Unit test') {
+            environment {
+                APP_ISSUER = credentials('APP_ISSUER')
+                APP_PRIVATE_KEY = credentials('API_PRIVATE_KEY_SELF_SOVEREING')
+                REACT_APP_EBSI_ENV = getEnvFromBranch(env.BRANCH_NAME)
+            }
+            steps {
+                sh 'yarn install --frozen-lockfile'
+                sh 'yarn test:unit'
             }
         }
         stage('Pre Checks') {
