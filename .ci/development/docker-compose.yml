@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   self-sovereign-identity:
-    image: 305472350643.dkr.ecr.eu-central-1.amazonaws.com/ebsi/self-sovereign-identity:development_ebsiint-2115-deps_v0.0.2
+    image: 305472350643.dkr.ecr.eu-central-1.amazonaws.com/ebsi/self-sovereign-identity:development_ebsiint-2439-release202011_v1.0.0
     build:
       context: ../..
       args:
