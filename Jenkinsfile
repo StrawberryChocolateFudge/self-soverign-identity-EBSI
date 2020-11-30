@@ -25,7 +25,8 @@ pipeline {
             environment {
                 APP_ISSUER = credentials('APP_ISSUER')
                 APP_PRIVATE_KEY = credentials('API_PRIVATE_KEY_SELF_SOVEREING')
-                REACT_APP_EBSI_ENV = getEnvFromBranch(env.BRANCH_NAME)
+                REACT_APP_EBSI_ENV = 'integration'
+                EBSI_ENV = 'integration'
             }
             steps {
                 sh 'yarn install --frozen-lockfile'
