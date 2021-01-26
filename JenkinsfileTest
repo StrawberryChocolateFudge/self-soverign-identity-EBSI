@@ -4,6 +4,7 @@ pipeline {
         stage('Setup') {
             steps {
                sh "yarn install --frozen-lockfile"
+               sh "yarn run audit"
             }
         }
         stage('Unit Test') {
@@ -27,6 +28,14 @@ pipeline {
         stage("Quality Gate") {
             steps {
                 waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+            dir("${env.WORKSPACE}@script") {
+                deleteDir()
             }
         }
     }

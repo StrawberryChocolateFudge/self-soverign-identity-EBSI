@@ -150,7 +150,7 @@ describe("login", () => {
   });
 
   it("should redirect the user to the wallet after requesting DID Auth", async () => {
-    expect.assertions(7);
+    expect.hasAssertions();
 
     const history = createMemoryHistory({
       initialEntries: [{ pathname: "/login", state: { from: "/test" } }],
@@ -243,7 +243,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is not approved by the backend", async () => {
-    expect.assertions(4);
+    expect.hasAssertions();
 
     const nonce = "nonce-123";
     const didAuthResponseJwt = "123";
@@ -330,7 +330,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is expired", async () => {
-    expect.assertions(3);
+    expect.hasAssertions();
 
     const payload = {
       sub_jwk: {
@@ -406,7 +406,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is missing some props", async () => {
-    expect.assertions(3);
+    expect.hasAssertions();
 
     const payload = {
       sub_jwk: {
@@ -481,7 +481,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is missing the DID", async () => {
-    expect.assertions(3);
+    expect.hasAssertions();
 
     const payload = {
       sub_jwk: {
@@ -556,7 +556,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is malfored", async () => {
-    expect.assertions(3);
+    expect.hasAssertions();
 
     const token = "123";
     const nonce = "nonce-123";
@@ -619,7 +619,7 @@ describe("login", () => {
   });
 
   it("should display an error when the DID Auth response JWT is missing", async () => {
-    expect.assertions(3);
+    expect.hasAssertions();
 
     const token = "";
     const nonce = "nonce-123";
@@ -682,7 +682,7 @@ describe("login", () => {
   });
 
   it("should redirect to state.from if the JWT is valid", async () => {
-    expect.assertions(4);
+    expect.hasAssertions();
 
     const payload = {
       sub_jwk: {
@@ -757,7 +757,7 @@ describe("login", () => {
   });
 
   it("should redirect to / the JWT is valid and state.from is not defined", async () => {
-    expect.assertions(4);
+    expect.hasAssertions();
 
     const payload = {
       sub_jwk: {
